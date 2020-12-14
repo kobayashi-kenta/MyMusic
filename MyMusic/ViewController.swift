@@ -22,13 +22,7 @@ class ViewController: UIViewController {
     var cymbalPlayer = AVAudioPlayer()
 
     @IBAction func cymbal(_ sender: Any) {
-        do {
-        cymbalPlayer = try AVAudioPlayer(contentsOf: cymbalPath, fileTypeHint: nil)
-        
-        cymbalPlayer.play()
-        } catch {
-            print("シンバルでエラーが発生しました！")
-        }
+        soundPlayer(player: &cymbalPlayer, path: cymbalPath, count: 0)
     }
     
     
@@ -39,13 +33,7 @@ class ViewController: UIViewController {
     
     
     @IBAction func guitar(_ sender: Any) {
-        do {
-            guitarPlayer = try AVAudioPlayer(contentsOf: guitarPath, fileTypeHint: nil)
-            
-            guitarPlayer.play()
-        } catch {
-            print("ギターでエラーが発生しました！")
-        }
+        soundPlayer(player: &guitarPlayer, path: guitarPath, count: 0)
     }
     
     //バックミュージックの音源ファイルを指定
@@ -55,16 +43,7 @@ class ViewController: UIViewController {
     var backmusicPlayer = AVAudioPlayer()
     
     @IBAction func play(_ sender: Any) {
-        do {
-            //バックミュージック用のプレイヤーに音源ファイルを指定
-            backmusicPlayer = try AVAudioPlayer(contentsOf: backmusicPath,fileTypeHint: nil)
-            
-            //リピート設定
-            backmusicPlayer.numberOfLoops = -1
-            backmusicPlayer.play()
-        } catch {
-            print("エラーが発生しました！")
-        }
+        soundPlayer(player: &backmusicPlayer, path: backmusicPath, count: -1)
     }
     
     //Stopボタンの処理
@@ -72,6 +51,17 @@ class ViewController: UIViewController {
     @IBAction func stop(_ sender: Any) {
          backmusicPlayer.stop()
 
+    }
+    
+    //共通のプレイヤー処理
+    fileprivate func soundPlayer(player:inout AVAudioPlayer, path: URL, count: Int) {
+        do {
+            player = try AVAudioPlayer(contentsOf: path, fileTypeHint: nil)
+            player.numberOfLoops = count
+            player.play()
+        } catch {
+            print("エラーが発生しました！")
+        }
     }
 }
 
